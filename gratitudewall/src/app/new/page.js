@@ -128,7 +128,7 @@ export default function GratitudeWall() {
       )}
 
       {/* Gratitude List with Username and Twitter */}
-      <div className="mt-8">
+      <div className="absolute top-[100%] w-full flex flex-col items-center">
         {gratitudeList.map((item, index) => (
           <div key={index} className="bg-grey border border-gray-300 rounded-lg p-4 mb-4 shadow-sm" style={{ width: '500px', height: '90px' }}>
             <p><strong>{item.username}</strong> {item.twitter && `(@${item.twitter})`}</p>
