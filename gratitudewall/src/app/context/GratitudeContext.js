@@ -1,23 +1,34 @@
-// app/context/GratitudeContext.js
+// context/GratitudeContext.js
 
-import { createContext, useState, useContext } from 'react';
+"use client";
+
+import React, { createContext, useContext, useState } from 'react';
 
 const GratitudeContext = createContext();
 
 export function GratitudeProvider({ children }) {
   const [gratitudeList, setGratitudeList] = useState([]);
 
-  const addGratitude = (newPost) => {
-    setGratitudeList((prevList) => [...prevList, newPost]);
+  const addGratitude = (newGratitude) => {
+    setGratitudeList([...gratitudeList, newGratitude]);
+  };
+
+  const value = {
+    gratitudeList,
+    addGratitude,
   };
 
   return (
-    <GratitudeContext.Provider value={{ gratitudeList, addGratitude }}>
+    <GratitudeContext.Provider value={value}>
       {children}
     </GratitudeContext.Provider>
   );
 }
 
 export function useGratitude() {
-  return useContext(GratitudeContext);
+  const context = useContext(GratitudeContext);
+  if (context === undefined) {
+    throw new Error('useGratitude must be used within a GratitudeProvider');
+  }
+  return context;
 }
