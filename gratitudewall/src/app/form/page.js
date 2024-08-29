@@ -32,6 +32,9 @@ export default function GratitudeWall() {
   const [notificationMessage, setNotificationMessage] = useState('');
   const [notificationColor, setNotificationColor] = useState('bg-green-500');
 
+  // State for managing likes
+  const [likes, setLikes] = useState([]);
+
   // Handlers for the input fields
   const handleGratitudeChange = (e) => setGratitudeText(e.target.value);
   const handleUsernameChange = (e) => setUsername(e.target.value);
@@ -55,18 +58,30 @@ export default function GratitudeWall() {
       setNotificationColor('bg-green-500');
       setShowNotification(true);
       setTimeout(() => setShowNotification(false), 6000);
+
+      // Initialize likes state for new posts
+      setLikes([...likes, { isLiked: false, count: 0 }]);
     }
+  };
+
+  // Handle like button click
+  const handleLikeClick = (index) => {
+    const updatedLikes = [...likes];
+    updatedLikes[index] = {
+      isLiked: !updatedLikes[index].isLiked,
+      count: updatedLikes[index].isLiked ? updatedLikes[index].count - 1 : updatedLikes[index].count + 1
+    };
+    setLikes(updatedLikes);
   };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-
       <h1 className="font-extrabold text-4xl text-center w-[650px] leading-9 absolute top-[10%] text-pretty">
         Build a Positive Space, One Grateful Thought at a Time
       </h1>
 
       <p className="absolute top-[30%] right-[58.8%]">
-        What are you grateful for ? <span className="text-red-500">*</span>
+        What are you grateful for? <span className="text-red-500">*</span>
       </p>
 
       {/* Gratitude Text Area */}
@@ -76,7 +91,7 @@ export default function GratitudeWall() {
           placeholder="Write your gratitude here..."
           style={{ backgroundColor: 'transparent' }}
           value={gratitudeText}
-          onChange={handleGratitudeChange}  // Update handler function
+          onChange={handleGratitudeChange}
         ></textarea>
       </div>
 
@@ -89,7 +104,7 @@ export default function GratitudeWall() {
           className="w-full h-full border-none outline-none resize-none rounded-lg"
           style={{ backgroundColor: 'transparent' }}
           value={username}
-          onChange={handleUsernameChange}  // Update handler function
+          onChange={handleUsernameChange}
         ></textarea>
       </div>
 
@@ -102,7 +117,7 @@ export default function GratitudeWall() {
           className="w-full h-full border-none outline-none resize-none rounded-lg"
           style={{ backgroundColor: 'transparent' }}
           value={Twitter}
-          onChange={handleTwitterChange}  // Update handler function
+          onChange={handleTwitterChange}
         ></textarea>
       </div>
 
@@ -130,9 +145,40 @@ export default function GratitudeWall() {
       {/* Gratitude List with Username and Twitter */}
       <div className="absolute top-[100%] w-full flex flex-col items-center">
         {gratitudeList.map((item, index) => (
-          <div key={index} className="bg-grey border border-gray-300 rounded-lg p-4 mb-4 shadow-sm" style={{ width: '500px', height: '90px' }}>
-            <p><strong>{item.username}</strong> {item.twitter && `(@${item.twitter})`}</p>
-            <p>{item.text}</p>
+          <div
+            key={index}
+            className="flex items-center bg-slate-50 border border-gray-300 rounded-lg p-4 mb-4 shadow-lg"
+            style={{ width: '500px', height: '120px' }} // Increased height to accommodate the like button
+          >
+            {/* Post Content */}
+            <div className="flex-1">
+              <p>
+                <strong>{item.username}</strong>{' '}
+                {item.twitter && (
+                  <a
+                    href={`https://twitter.com/${item.twitter}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    @{item.twitter}
+                  </a>
+                )}
+              </p>
+              <p>{item.text}</p>
+            </div>
+
+            {/* Like Button and Counter */}
+            <div className="flex flex-col items-center ml-4">
+              <button
+                onClick={() => handleLikeClick(index)}
+                className={`text-2xl ${likes[index]?.isLiked ? 'text-blue-600' : 'text-gray-500'} transition-transform duration-200`}
+                style={{ transform: likes[index]?.isLiked ? 'scale(1.5)' : 'scale(1)' }}
+              >
+                🕊️
+              </button>
+              <h2 className="text-center font-bold font-lg mt-1">{likes[index]?.count || 0}</h2> {/* Like Counter */}
+            </div>
           </div>
         ))}
       </div>

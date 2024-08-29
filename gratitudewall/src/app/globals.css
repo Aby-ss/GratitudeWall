@@ -4,8 +4,8 @@
 
 :root {
   --foreground-rgb: 0, 0, 0; /* Black text color */
-  --background-start-rgb: 240, 240, 240; /* Ivory background color */
-  --background-end-rgb: 240, 240, 240; /* Ivory background color */
+  --background-start-rgb: 229, 229, 229; /* Ivory background color */
+  --background-end-rgb: 229, 229, 229; /* Ivory background color */
 }
 
 @media (prefers-color-scheme: white) { /* CUSTOMISE TIP 💡 : Set the colour theme to dark or white to change the colours of the web page to be responsive to the theme */
@@ -50,4 +50,16 @@ body {
 
 .font-extrabold {
   font-weight: 800;
+}
+
+.logo {
+  transition: background-color 0.3s, transform 0.6s;
+}
+
+.logo:hover {
+  background-color: grey;
+}
+
+.logo.clicked {
+  transform: rotate(360deg);
 }
